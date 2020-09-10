@@ -46,3 +46,5 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - portland-fp-parsing
+    - tasty
+    - tasty-hunit
