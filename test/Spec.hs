@@ -1,5 +1,5 @@
 import Data.List.NonEmpty (NonEmpty(..))
-import Parser
+import Parser as P
 import Test.Tasty
 import Test.Tasty.HUnit
 
@@ -20,6 +20,14 @@ tests = testGroup "Parser Tests"
     (zeroOrMore (char 'a')) "bcd" @?= Right ("", "bcd")
   , testCase "parses several characters" $
     (oneOrMore (char 'a')) "aabc" @?= Right ('a' :| ['a'], "bc")
+  , testGroup "either parser tests"
+    [ testCase "parses either of two characters (1)" $
+      (P.either (char 'a') (char 'b')) "abc" @?= Right ('a', "bc")
+    , testCase "parses either of two characters (2)" $
+      (P.either (char 'a') (char 'b')) "bac" @?= Right ('b', "ac")
+    , testCase "fails to parse either of two characters" $
+      assertFailedParse ((P.either (char 'a') (char 'b')) "dab")
+    ]
   ]
 
 assertFailedParse :: Either String (a, String) -> Assertion

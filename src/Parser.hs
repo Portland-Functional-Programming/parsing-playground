@@ -32,3 +32,11 @@ oneOrMore p = \s -> case p s of
   Right (v, rest) -> case (zeroOrMore p) rest of
     Left _ -> Right (v :| [], rest)
     Right (vs, rest') -> Right (v :| vs, rest')
+
+-- |Creates a Parser that attempts to parse the input using the first parser. If
+-- that succeeds that parse result is the result; if it fails the result is the
+-- result of parsing the input using the second parser.
+either :: Parser a -> Parser a -> Parser a
+either p1 p2 = \s -> case p1 s of
+  Left _ -> p2 s
+  Right result -> Right result
