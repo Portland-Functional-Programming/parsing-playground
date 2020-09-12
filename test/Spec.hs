@@ -1,3 +1,4 @@
+import Data.Char (ord)
 import Data.List.NonEmpty (NonEmpty(..))
 import Parser as P
 import Test.Tasty
@@ -49,6 +50,9 @@ tests = testGroup "Parser Tests"
     , testCase "unsuccessful parse" $
       assertFailedParse $ (char '(' `andThen` char 'a') "abc"
     ]
+
+  , testCase "test parser mapping" $
+    (pmap ord (char 'a')) "abc" @?= Right (97, "bc")
   ]
 
 assertFailedParse :: Either String (a, String) -> Assertion

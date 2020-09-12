@@ -41,7 +41,15 @@ either p1 p2 = \s -> case p1 s of
   Left _ -> p2 s
   Right result -> Right result
 
+-- |Runs the first parser and, if it succeeds, discards the parsed value and
+-- then runs the second parser.
 andThen :: Parser a -> Parser b -> Parser b
 andThen p1 p2 = \s -> case p1 s of
   Left err -> Left err
   Right (_, rest) -> p2 rest
+
+-- |Maps a function over a Parser.
+pmap :: (a -> b) -> Parser a -> Parser b
+pmap f p = \s -> case p s of
+  Left err -> Left err
+  Right (v, rest) -> Right (f v, rest)
