@@ -40,3 +40,8 @@ either :: Parser a -> Parser a -> Parser a
 either p1 p2 = \s -> case p1 s of
   Left _ -> p2 s
   Right result -> Right result
+
+andThen :: Parser a -> Parser b -> Parser b
+andThen p1 p2 = \s -> case p1 s of
+  Left err -> Left err
+  Right (_, rest) -> p2 rest

@@ -42,6 +42,13 @@ tests = testGroup "Parser Tests"
     , testCase "fails to parse either of two characters" $
       assertFailedParse ((P.either (char 'a') (char 'b')) "dab")
     ]
+
+  , testGroup "andThen parser tests"
+    [ testCase "successful parse" $
+      (char '(' `andThen` char 'a') "(abc" @?= Right ('a', "bc")
+    , testCase "unsuccessful parse" $
+      assertFailedParse $ (char '(' `andThen` char 'a') "abc"
+    ]
   ]
 
 assertFailedParse :: Either String (a, String) -> Assertion
